@@ -31,7 +31,8 @@ func rawError(err error) jx.Raw {
 func (h *OgentHandler) CreateUsers(ctx context.Context, req CreateUsersReq) (CreateUsersRes, error) {
 	b := h.client.Users.Create()
 	// Add all fields.
-	b.SetUser(req.User)
+	// b.SetUser(req.User)
+	b.SetUser("syui")
 	if v, ok := req.Chara.Get(); ok {
 		b.SetChara(v)
 	}
@@ -216,25 +217,25 @@ func (h *OgentHandler) UpdateUsers(ctx context.Context, req UpdateUsersReq, para
 // DeleteUsers handles DELETE /users-slice/{id} requests.
 func (h *OgentHandler) DeleteUsers(ctx context.Context, params DeleteUsersParams) (DeleteUsersRes, error) {
 	err := h.client.Users.DeleteOneID(params.ID).Exec(ctx)
-	if err != nil {
-		switch {
-		case ent.IsNotFound(err):
-			return &R404{
-				Code:   http.StatusNotFound,
-				Status: http.StatusText(http.StatusNotFound),
-				Errors: rawError(err),
-			}, nil
-		case ent.IsConstraintError(err):
-			return &R409{
-				Code:   http.StatusConflict,
-				Status: http.StatusText(http.StatusConflict),
-				Errors: rawError(err),
-			}, nil
-		default:
-			// Let the server handle the error.
-			return nil, err
-		}
-	}
+	//if err != nil {
+	//	switch {
+	//	case ent.IsNotFound(err):
+	//		return &R404{
+	//			Code:   http.StatusNotFound,
+	//			Status: http.StatusText(http.StatusNotFound),
+	//			Errors: rawError(err),
+	//		}, nil
+	//	case ent.IsConstraintError(err):
+	//		return &R409{
+	//			Code:   http.StatusConflict,
+	//			Status: http.StatusText(http.StatusConflict),
+	//			Errors: rawError(err),
+	//		}, nil
+	//	default:
+	//		// Let the server handle the error.
+	//		return nil, err
+	//	}
+	//}
 	return new(DeleteUsersNoContent), nil
 
 }
