@@ -87,6 +87,7 @@ func (Users) Fields() []ent.Field {
 		Unique(),
 
 		field.String("chara").
+		Immutable().
 		Default(CharaR()).
 		Optional(),
 
