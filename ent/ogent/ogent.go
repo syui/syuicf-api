@@ -216,28 +216,30 @@ func (h *OgentHandler) UpdateUsers(ctx context.Context, req UpdateUsersReq, para
 
 // DeleteUsers handles DELETE /users-slice/{id} requests.
 func (h *OgentHandler) DeleteUsers(ctx context.Context, params DeleteUsersParams) (DeleteUsersRes, error) {
-	err := h.client.Users.DeleteOneID(params.ID).Exec(ctx)
-	//if err != nil {
-	//	switch {
-	//	case ent.IsNotFound(err):
-	//		return &R404{
-	//			Code:   http.StatusNotFound,
-	//			Status: http.StatusText(http.StatusNotFound),
-	//			Errors: rawError(err),
-	//		}, nil
-	//	case ent.IsConstraintError(err):
-	//		return &R409{
-	//			Code:   http.StatusConflict,
-	//			Status: http.StatusText(http.StatusConflict),
-	//			Errors: rawError(err),
-	//		}, nil
-	//	default:
-	//		// Let the server handle the error.
-	//		return nil, err
-	//	}
-	//}
-	return new(DeleteUsersNoContent), nil
 
+	if params.ID != 1 {
+		err := h.client.Users.DeleteOneID(params.ID).Exec(ctx)
+		if err != nil {
+			switch {
+			case ent.IsNotFound(err):
+				return &R404{
+					Code:   http.StatusNotFound,
+					Status: http.StatusText(http.StatusNotFound),
+					Errors: rawError(err),
+				}, nil
+			case ent.IsConstraintError(err):
+				return &R409{
+					Code:   http.StatusConflict,
+					Status: http.StatusText(http.StatusConflict),
+					Errors: rawError(err),
+				}, nil
+			default:
+				// Let the server handle the error.
+				return nil, err
+			}
+		}
+	}
+	return new(DeleteUsersNoContent), nil
 }
 
 // ListUsers handles GET /users-slice requests.
